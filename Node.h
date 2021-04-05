@@ -1,6 +1,6 @@
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
-
+//Daniel
 #include <string>
 struct Node {
     std::string data;
