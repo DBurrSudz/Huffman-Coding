@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    PriorityQueue queue;
+    PriorityQueue queue();
     cout << "Hello world!" << endl;
     return 0;
 }
