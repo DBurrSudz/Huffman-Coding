@@ -102,9 +102,11 @@ void PriorityQueue::sift_up(int index)
 
 void PriorityQueue::insert_value(Node new_value)
 {
-    int insert_index = heap.size();
-    heap[insert_index] = new_value;
-    sift_up(insert_index);
+    //int insert_index = heap.size();
+    //heap[insert_index] = new_value;
+
+    heap.insert(heap.end(), new_value);
+    sift_up(heap.size()-1);
 }
 
 
