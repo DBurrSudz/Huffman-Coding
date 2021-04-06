@@ -86,16 +86,18 @@ int PriorityQueue::get_right_child(int curr_indx)
 }
 
 void PriorityQueue::sift_up(int index)
-{
-    int min=index;
-    int parent = get_parent(index);
-    
-    if (heap[index].frequency<heap[parent].frequency){
-        index= parent;
-        parent= min;
-        sift_up(parent);
+{   
+    if(within_heap_range(index))
+    {
+        int min=index;
+        int parent = get_parent(index);
+        
+        if (heap[index].frequency<heap[parent].frequency){
+            index= parent;
+            parent= min;
+            sift_up(parent);
+        }
     }
-
 }
 
 void PriorityQueue::insert_value(Node new_value)
