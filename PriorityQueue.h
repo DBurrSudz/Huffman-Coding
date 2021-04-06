@@ -16,12 +16,21 @@ private:
     int get_parent(int curr_indx);
     bool within_heap_range(int curr_indx);
 
+
 public:
     PriorityQueue();
     PriorityQueue(int Arr[], const int SIZE);
     void insert_value(Node new_node);
     Node extract_min();
+    int get_size();
+    Node get_value(int index);
+    Node peek_top();
+
 };
+
+//Constructors
+
+PriorityQueue::PriorityQueue() {}
 
 /**
 * @brief Checks if a given index is within the range of the heap.
@@ -62,7 +71,7 @@ int PriorityQueue::get_left_child(int curr_indx)
 {
     if(within_heap_range(curr_indx))
     {
-        int left_child = 2 * curr_indx;
+        int left_child = (2 * curr_indx) + 1;
         return left_child;
     }
     return -1;
@@ -78,43 +87,117 @@ int PriorityQueue::get_right_child(int curr_indx)
 {
     if(within_heap_range(curr_indx))
     {
-        int right_child = (2 * curr_indx) + 1;
+        int right_child = (2 * curr_indx) + 2;
         return right_child;
     }
 
     return -1;
 }
 
+
+/**
+* @brief Maintains "min-heap" property by comparing children to their parents.
+* @param index Index to be compared with parent.
+*/
 void PriorityQueue::sift_up(int index)
-{   
-    if(within_heap_range(index))
+{
+    //Base Case: Stop if its the root.
+    if(within_heap_range(index) && index != 0)
     {
-        int min=index;
-        heap[min]=heap[index];
         int parent = get_parent(index);
-        
-        if (heap[index].frequency<heap[parent].frequency){
-            
-            heap[index]= heap[parent];
-            index= parent;
-            
-            heap[parent]= heap[min];
-            parent= min;
+
+        if (heap[index].frequency <= heap[parent].frequency)
+        {
+            Node temp = heap[index];
+            heap[index] = heap[parent];
+            heap[parent] = temp;
             sift_up(parent);
         }
     }
 }
 
-void PriorityQueue::insert_value(Node new_value)
+/**
+* @brief Maintains "min-heap" property by comparing a parent to its children.
+* @param index Index to be compared with children.
+*/
+void PriorityQueue::sift_down(int index)
 {
-    //int insert_index = heap.size();
-    //heap[insert_index] = new_value;
+    //Base Case: Stop if its the last element of the list.
+    if(within_heap_range(index) && unsigned(index) != heap.size() - 1)
+    {
+        int left_child = get_left_child(index);
+        int right_child = get_right_child(index);
+        int min_child;
 
-    heap.insert(heap.end(), new_value);
-    sift_up(heap.size()-1);
+        //The node has both a left and right child in the binary heap.
+        if(within_heap_range(left_child) && within_heap_range(right_child))
+        {
+            min_child = (heap[left_child].frequency < heap[right_child].frequency) ? left_child : right_child;
+        }
+
+        //If the there is no right child for this Node, the min child is by default its left child.
+        //if(within_heap_range(left_child) && !(within_heap_range(right_child)))
+        else min_child = left_child;
+
+        if(heap[index].frequency <= heap[min_child].frequency)
+        {
+            Node temp = heap[min_child];
+            heap[min_child] = heap[index];
+            heap[index] = temp;
+            sift_down(min_child);
+        }
+    }
 }
 
 
+/**
+* @brief Inserts a value into the heap.
+* @param new_value The new value to be entered.
+*/
+void PriorityQueue::insert_value(Node new_value)
+{
+
+    heap.push_back(new_value);
+    int insert_index = heap.size() - 1;
+    sift_up(insert_index);
+}
+
+
+/**
+* @brief Removes the element of highest priority in the heap.
+* @return The element having highest priority.
+*/
+Node PriorityQueue::extract_min()
+{
+    int last_index = heap.size() - 1;
+    Node temp = heap[last_index];
+    heap[last_index] = heap[0];
+    heap[0] = temp;
+    Node data_out = heap[last_index];
+    heap.pop_back();
+    sift_down(0);
+    return data_out;
+}
+
+/**
+* @brief Gets the size of the heap.
+* @return The size of the heap.
+*/
+int PriorityQueue::get_size() {return heap.size();}
+
+Node PriorityQueue::get_value(int index)
+{
+    if(within_heap_range(index)) return heap[index];
+    else {
+        Node new_node = {"unknown",-1};
+        return new_node;
+    }
+}
+
+Node PriorityQueue::peek_top()
+{
+    return heap[0];
+}
 
 
 #endif // PRIORITYQUEUE_H_INCLUDED
