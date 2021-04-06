@@ -90,10 +90,15 @@ void PriorityQueue::sift_up(int index)
     if(within_heap_range(index))
     {
         int min=index;
+        heap[min]=heap[index];
         int parent = get_parent(index);
         
         if (heap[index].frequency<heap[parent].frequency){
+            
+            heap[index]= heap[parent];
             index= parent;
+            
+            heap[parent]= heap[min];
             parent= min;
             sift_up(parent);
         }
