@@ -10,7 +10,6 @@ private:
     void sift_up(int index);
     void sift_down(int index);
     void heapify();
-    bool empty();
     int get_left_child(int curr_indx);
     int get_right_child(int curr_indx);
     int get_parent(int curr_indx);
@@ -19,7 +18,7 @@ private:
 
 public:
     PriorityQueue();
-    PriorityQueue(int Arr[], const int SIZE);
+    PriorityQueue(Node Arr[], const int SIZE);
     void insert_value(Node new_node);
     Node extract_min();
     int get_size();
@@ -30,7 +29,26 @@ public:
 
 //Constructors
 
+/**
+* @brief Default constructor for the PriorityQueue class
+*/
 PriorityQueue::PriorityQueue() {}
+
+
+/**
+* @brief Constructor for the PriorityQueue class
+* @param Arr An array of Nodes.
+* @param The size of the array.
+*/
+PriorityQueue::PriorityQueue(Node Arr[], const int SIZE)
+{
+    for(int i = 0; i < SIZE; i++)
+    {
+        heap.push_back(Arr[i]);
+    }
+    heapify();
+}
+
 
 /**
 * @brief Checks if a given index is within the range of the heap.
@@ -136,16 +154,30 @@ void PriorityQueue::sift_down(int index)
         }
 
         //If the there is no right child for this Node, the min child is by default its left child.
-        //if(within_heap_range(left_child) && !(within_heap_range(right_child)))
-        else min_child = left_child;
+        else if(within_heap_range(left_child) && !(within_heap_range(right_child))) min_child = left_child;
 
-        if(heap[index].frequency <= heap[min_child].frequency)
+        else return; //Both children do not not exist in the heap.
+
+        if(heap[index].frequency >= heap[min_child].frequency)
         {
             Node temp = heap[min_child];
             heap[min_child] = heap[index];
             heap[index] = temp;
             sift_down(min_child);
         }
+    }
+}
+
+
+/**
+* @brief Converts a given array to a binary heap.
+*
+*/
+void PriorityQueue::heapify()
+{
+    for(int i = unsigned((heap.size() - 1)/2); i >= 0; i--)
+    {
+        sift_down(i);
     }
 }
 
@@ -169,13 +201,23 @@ void PriorityQueue::insert_value(Node new_value)
 */
 Node PriorityQueue::extract_min()
 {
-    int last_index = heap.size() - 1;
-    Node temp = heap[last_index];
-    heap[last_index] = heap[0];
-    heap[0] = temp;
-    Node data_out = heap[last_index];
-    heap.pop_back();
-    sift_down(0);
+    Node data_out;
+
+    if(heap.size() == 1)
+    {
+        data_out = heap[0];
+        heap.pop_back();
+    }
+    else
+    {
+        int last_index = heap.size() - 1;
+        Node temp = heap[last_index];
+        heap[last_index] = heap[0];
+        heap[0] = temp;
+        data_out = heap[last_index];
+        heap.pop_back();
+        sift_down(0);
+    }
     return data_out;
 }
 
