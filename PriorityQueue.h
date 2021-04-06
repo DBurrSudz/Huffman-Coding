@@ -91,9 +91,11 @@ void PriorityQueue::sift_up(int index)
     int parent = get_parent(index);
     
     if (heap[index].frequency<heap[parent].frequency){
-        heap[index]= heap[parent];
-        heap[parent]= heap[min];
+        index= parent;
+        parent= min;
+        sift_up(parent);
     }
+
 }
 
 void PriorityQueue::insert_value(Node new_value)
