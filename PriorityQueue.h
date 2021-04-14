@@ -20,10 +20,10 @@ public:
     PriorityQueue();
     PriorityQueue(Node Arr[], const int SIZE);
     void insert_value(Node new_node);
-    Node extract_min();
+    Node* extract_min();
     int get_size();
-    Node get_value(int index);
-    Node peek_top();
+    Node* get_value(int index);
+    Node* peek_top();
 
 };
 
@@ -183,12 +183,11 @@ void PriorityQueue::heapify()
 
 
 /**
-* @brief Inserts a value into the heap.
+* @brief Inserts a value into the heap. Attempts to maintain minheap property after insertion.
 * @param new_value The new value to be entered.
 */
 void PriorityQueue::insert_value(Node new_value)
 {
-
     heap.push_back(new_value);
     int insert_index = heap.size() - 1;
     sift_up(insert_index);
@@ -196,16 +195,17 @@ void PriorityQueue::insert_value(Node new_value)
 
 
 /**
-* @brief Removes the element of highest priority in the heap.
+* @brief Removes the element of highest priority in the heap. Attempts to maintain minheap property after extraction.
 * @return The element having highest priority.
 */
-Node PriorityQueue::extract_min()
+Node* PriorityQueue::extract_min()
 {
-    Node data_out;
+    if(heap.size() == 0) return NULL;
+    Node* data_out;
 
     if(heap.size() == 1)
     {
-        data_out = heap[0];
+        data_out = &heap[0];
         heap.pop_back();
     }
     else
@@ -214,7 +214,7 @@ Node PriorityQueue::extract_min()
         Node temp = heap[last_index];
         heap[last_index] = heap[0];
         heap[0] = temp;
-        data_out = heap[last_index];
+        data_out = &heap[last_index];
         heap.pop_back();
         sift_down(0);
     }
@@ -227,18 +227,21 @@ Node PriorityQueue::extract_min()
 */
 int PriorityQueue::get_size() {return heap.size();}
 
-Node PriorityQueue::get_value(int index)
+Node* PriorityQueue::get_value(int index)
 {
-    if(within_heap_range(index)) return heap[index];
-    else {
-        Node new_node = {"unknown",-1};
-        return new_node;
-    }
+    if(within_heap_range(index)) return &heap[index];
+    else return NULL;
 }
 
-Node PriorityQueue::peek_top()
+/**
+* @brief Returns the element at the top of the queue. This method does not extract the smallest value
+*        so the minheap property is not violated.
+* @return The node at the top of the heap.
+*/
+Node* PriorityQueue::peek_top()
 {
-    return heap[0];
+    if(heap.size() == 0) return NULL;
+    return &heap[0];
 }
 
 
