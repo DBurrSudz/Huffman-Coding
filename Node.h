@@ -4,11 +4,9 @@
 #include <string>
 struct Node {
     std::string data;
-    //std::string code;
     int frequency;
-    //Node* left;
-    //Node* right;
-    //Node* parent;
+    Node* left;
+    Node* right;
 };
 
 
