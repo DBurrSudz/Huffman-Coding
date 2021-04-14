@@ -1,9 +1,9 @@
 #include <iostream>
 #include "PriorityQueue.h"
+#include "BST.h"
 
 int main()
 {
-    std::cout << "Hello World" << std::endl;
     Node symbol1 = {"a",23};
     Node symbol2 = {"b",89};
     Node symbol3 = {"c",2};
@@ -15,7 +15,7 @@ int main()
 
     for(int i = 0; i < queue.get_size(); i++)
     {
-        std::cout << queue.get_value(i).data << std::endl;
+        std::cout << queue.get_value(i)->data << std::endl;
     }
 
     return 0;
