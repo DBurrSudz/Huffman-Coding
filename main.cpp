@@ -4,19 +4,19 @@
 
 int main()
 {
-    Node symbol1 = {"a",23};
-    Node symbol2 = {"b",89};
-    Node symbol3 = {"c",2};
-    Node symbol4 = {"d",24};
-    Node symbol5 = {"e",24};
-    Node symbol6 = {"f",10};
+    Node symbol1 = {"a",23,NULL,NULL};
+    Node symbol2 = {"b",89,NULL,NULL};
+    Node symbol3 = {"c",2,NULL,NULL};
+    Node symbol4 = {"d",24,NULL,NULL};
+    Node symbol5 = {"e",24,NULL,NULL};
+    Node symbol6 = {"f",10,NULL,NULL};
     Node arr[] = {symbol1,symbol2,symbol3,symbol4,symbol5,symbol6};
     PriorityQueue queue(arr,6);
 
-    for(int i = 0; i < queue.get_size(); i++)
-    {
-        std::cout << queue.get_value(i)->data << std::endl;
-    }
+    HuffmanTree tree(queue);
+    Node* root = tree.generate_tree();
+    //tree.generate_codes(root);
+    tree.print_breadth(root);
 
     return 0;
 }

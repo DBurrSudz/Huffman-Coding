@@ -3,26 +3,27 @@
 
 #include "Node.h"
 #include "PriorityQueue.h"
+#include <iostream>
+#include <queue>
 
 class HuffmanTree
 {
 private:
     PriorityQueue q;
-    Node* root;
     Node create_node(const int frequency, Node* left, Node* right);
 
 
 public:
     HuffmanTree(PriorityQueue q);
-    void generate_tree();
-    void generate_codes();
+    Node* generate_tree();
+    void generate_codes(Node* root, std::string code);
+    void print_breadth(Node* root);
 };
 
 
 HuffmanTree::HuffmanTree(PriorityQueue q)
 {
     this->q = q;
-    this->root = NULL;
 }
 
 /**
@@ -38,7 +39,7 @@ Node HuffmanTree::create_node(const int frequency, Node* left, Node* right)
     return new_node;
 }
 
-void HuffmanTree::generate_tree()
+Node* HuffmanTree::generate_tree()
 {
     while(this->q.get_size() != 1)
     {
@@ -49,8 +50,44 @@ void HuffmanTree::generate_tree()
         this->q.insert_value(parent);
     }
 
-    this->root = this->q.peek_top();
+    return q.peek_top();
 }
 
+void HuffmanTree::generate_codes(Node* root, std::string code = "")
+{
+    if(root->left == NULL && root->right == NULL)
+    {
+        std::cout << "Symbol: " << root->data << " Code: " << code << std::endl;
+        return;
+    }
+    if(root->left != NULL)
+    {
+        code.append("0");
+        generate_codes(root->left,code);
+    }
+    if(root->right != NULL)
+    {
+        code.append("1");
+        generate_codes(root->right,code);
+    }
+}
+
+void HuffmanTree::print_breadth(Node* root)
+{
+    if(root->left == NULL && root->right == NULL) return;
+    else
+    {
+        std::queue<Node*> qu;
+        qu.push(root);
+        while(!qu.empty())
+        {
+            Node* frontv = qu.front();
+            qu.pop();
+            std::cout << frontv->data << "  " << frontv->frequency << std::endl;
+            if(frontv->left != NULL) qu.push(frontv->left);
+            if(frontv->right != NULL) qu.push(frontv->right);
+        }
+    }
+}
 
 #endif // BST_H_INCLUDED
