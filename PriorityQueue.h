@@ -6,8 +6,9 @@
 class PriorityQueue
 {
 private:
-    std::vector<Node> heap;
+    std::vector<Node*> heap;
     void sift_up(int index);
+    Node* create_node(char symbol, int frequency, Node* left, Node* right);
     void sift_down(int index);
     void heapify();
     int get_left_child(int curr_indx);
@@ -18,8 +19,8 @@ private:
 
 public:
     PriorityQueue();
-    PriorityQueue(Node Arr[], const int SIZE);
-    void insert_value(Node new_node);
+    PriorityQueue(Node* Arr[], const int SIZE);
+    void insert_value(char symbol, int frequency, Node* left, Node* right);
     Node* extract_min();
     int get_size();
     Node* get_value(int index);
@@ -40,7 +41,7 @@ PriorityQueue::PriorityQueue() {}
 * @param Arr An array of Nodes.
 * @param The size of the array.
 */
-PriorityQueue::PriorityQueue(Node Arr[], const int SIZE)
+PriorityQueue::PriorityQueue(Node* Arr[], const int SIZE)
 {
     for(int i = 0; i < SIZE; i++)
     {
@@ -48,6 +49,18 @@ PriorityQueue::PriorityQueue(Node Arr[], const int SIZE)
     }
     heapify();
 }
+
+
+Node* PriorityQueue::create_node(char symbol, int frequency, Node* left, Node* right)
+{
+    Node* new_node = new Node();
+    new_node->symbol = symbol;
+    new_node->frequency = frequency;
+    new_node->left = left;
+    new_node->right = right;
+    return new_node;
+}
+
 
 
 /**
@@ -124,9 +137,9 @@ void PriorityQueue::sift_up(int index)
     {
         int parent = get_parent(index);
 
-        if (heap[index].frequency <= heap[parent].frequency)
+        if (heap[index]->frequency <= heap[parent]->frequency)
         {
-            Node temp = heap[index];
+            Node* temp = heap[index];
             heap[index] = heap[parent];
             heap[parent] = temp;
             sift_up(parent);
@@ -150,7 +163,7 @@ void PriorityQueue::sift_down(int index)
         //The node has both a left and right child in the binary heap.
         if(within_heap_range(left_child) && within_heap_range(right_child))
         {
-            min_child = (heap[left_child].frequency < heap[right_child].frequency) ? left_child : right_child;
+            min_child = (heap[left_child]->frequency < heap[right_child]->frequency) ? left_child : right_child;
         }
 
         //If the there is no right child for this Node, the min child is by default its left child.
@@ -158,9 +171,9 @@ void PriorityQueue::sift_down(int index)
 
         else return; //Both children do not not exist in the heap.
 
-        if(heap[index].frequency >= heap[min_child].frequency)
+        if(heap[index]->frequency >= heap[min_child]->frequency)
         {
-            Node temp = heap[min_child];
+            Node* temp = heap[min_child];
             heap[min_child] = heap[index];
             heap[index] = temp;
             sift_down(min_child);
@@ -186,9 +199,9 @@ void PriorityQueue::heapify()
 * @brief Inserts a value into the heap. Attempts to maintain minheap property after insertion.
 * @param new_value The new value to be entered.
 */
-void PriorityQueue::insert_value(Node new_value)
+void PriorityQueue::insert_value(char symbol, int frequency, Node* left, Node* right)
 {
-    heap.push_back(new_value);
+    heap.push_back(create_node(symbol,frequency,left,right));
     int insert_index = heap.size() - 1;
     sift_up(insert_index);
 }
@@ -205,16 +218,16 @@ Node* PriorityQueue::extract_min()
 
     if(heap.size() == 1)
     {
-        data_out = &heap[0];
+        data_out = heap[0];
         heap.pop_back();
     }
     else
     {
         int last_index = heap.size() - 1;
-        Node temp = heap[last_index];
+        Node* temp = heap[last_index];
         heap[last_index] = heap[0];
         heap[0] = temp;
-        data_out = &heap[last_index];
+        data_out = heap[last_index];
         heap.pop_back();
         sift_down(0);
     }
@@ -229,19 +242,19 @@ int PriorityQueue::get_size() {return heap.size();}
 
 Node* PriorityQueue::get_value(int index)
 {
-    if(within_heap_range(index)) return &heap[index];
+    if(within_heap_range(index)) return heap[index];
     else return NULL;
 }
 
 /**
 * @brief Returns the element at the top of the queue. This method does not extract the smallest value
-*        so the minheap property is not violated.
+*        so the min-heap property is not violated.
 * @return The node at the top of the heap.
 */
 Node* PriorityQueue::peek_top()
 {
     if(heap.size() == 0) return NULL;
-    return &heap[0];
+    return heap[0];
 }
 
 
