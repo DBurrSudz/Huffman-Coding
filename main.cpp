@@ -30,14 +30,16 @@ void cmd_menu()
         q.insert_value(symbol,frequency,NULL,NULL);
     }
     HuffmanTree tree(q);
+
     Node* root = tree.generate_tree();
     tree.generate_codes(root);
+
+
     std::cout << "Using the symbols given, please enter a string to encode: ";
     std::cin.ignore();
     std::getline(std::cin,data);
     std::string output = tree.encode(data);
     std::cout << "Encoded Data is: " << output;
-
     std::cout << "\nWell done, now please enter a string to decode: ";
     std::getline(std::cin,data);
     output = tree.decode(root,data);

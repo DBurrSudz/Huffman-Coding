@@ -41,7 +41,6 @@ Node* HuffmanTree::generate_tree()
         Node* right = this->q.extract_min();
         this->q.insert_value('\0',left->frequency + right->frequency, left, right);
     }
-
     return q.peek_top();
 }
 
@@ -53,10 +52,11 @@ Node* HuffmanTree::generate_tree()
 void HuffmanTree::generate_codes(Node* root, std::string code = "")
 {
 
+
     //This is a leaf node. Stop and print the code.
     if(root->left == NULL && root->right == NULL)
     {
-        //std::cout << "Symbol: " << root->symbol << " Code: " << code << std::endl;
+        std::cout << "Symbol: " << root->symbol << " Code: " << code << std::endl;
         this->codes[root->symbol] = code;
     }
     if(root->left)
@@ -78,10 +78,12 @@ void HuffmanTree::generate_codes(Node* root, std::string code = "")
 std::string HuffmanTree::encode(std::string data)
 {
     std::string encoded;
+
     for(int unsigned(i) = 0; i < data.size();i++)
     {
         encoded += this->codes.find(data.at(i))->second;
     }
+
     return encoded;
 }
 
@@ -128,6 +130,7 @@ bool HuffmanTree::encode(std::string input_file,std::string output_file)
 */
 std::string HuffmanTree::decode(Node* root, std::string data)
 {
+
     std::string decoded;
     Node* traveller = root;
     for(int unsigned(i) = 0; i < data.size();i++)
