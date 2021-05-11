@@ -33,4 +33,4 @@ If the user selects to enter information via the command-line, they should first
 
 
 If the user selects to submit information with files, they should first provide a complete path to the file that contains the symbols and their associated frequencies. In this file, symbols and their frequency must be listed line by line with a space between them. Refer to frequency.txt for an example.
-Subsequently, enter a path to a file that has string containing the symbols given to be encoded, and its output file path. Similarly, to decode, enter a file path to the file with the binary string to be decoded and the file path it will be outputted to.
+Subsequently, enter a path to a file that has string containing the symbols given to be encoded, and its output file path. Similarly, to decode, enter a file path to the file with the binary string to be decoded and the file path it will be outputted to. See input.txt and frequencies.txt as a guide on how to provide input.
